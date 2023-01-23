@@ -26,12 +26,13 @@ public class Consumer1 {
         configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
         configs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
-        configs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        configs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");   // 브로커에 저장된 첫 메시지부터 읽어 옴
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(configs);
         consumer.subscribe(Arrays.asList(TOPIC_NAME));
 
         while(true){
+            // 컨슈머는 브로커에서 polling 방식으로 메시지를 가져옴
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
 
             for(ConsumerRecord<String, String> record : records) {
